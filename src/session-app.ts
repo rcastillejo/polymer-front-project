@@ -20,6 +20,8 @@ export class SessionApp {
     this._userToken = undefined;
     sessionStorage.removeItem('userToken');
     sessionStorage.removeItem('userName');
+    sessionStorage.removeItem('fullName');
+    sessionStorage.removeItem('sex');
   }
 
   static get userName(): string {
