@@ -1,13 +1,18 @@
-import {LitElement, html, css, property, customElement} from 'lit-element';
-import { SessionApp } from '../../session-app.js'
-import { RouterLocation, PreventAndRedirectCommands } from '@vaadin/router';
-import { router } from "../../index.js";
+import { LitElement, html, css, property, customElement } from 'lit-element';
+import { SessionApp } from '../../session-app.js';
+import {
+  RouterLocation,
+  PreventAndRedirectCommands,
+  Router,
+} from '@vaadin/router';
+import { router } from '../../index.js';
 import '@vaadin/vaadin-app-layout/theme/lumo/vaadin-app-layout';
 import { AppLayoutElement } from '@vaadin/vaadin-app-layout/src/vaadin-app-layout';
 import '@vaadin/vaadin-app-layout/vaadin-drawer-toggle';
 import '@vaadin/vaadin-tabs/theme/lumo/vaadin-tab';
 import '@vaadin/vaadin-tabs/theme/lumo/vaadin-tabs';
-import { Router } from '@vaadin/router';
+
+import { ConstantsApp } from '../../constants-app.js';
 
 //customElements.define('session-app', SessionApp);
 
@@ -17,16 +22,16 @@ interface MenuTab {
   route: string;
   name: string;
 }
-@customElement("vank-app")
+@customElement('vank-app')
 export class VankApp extends LitElement {
-
   onBeforeEnter(
     location: RouterLocation,
-    commands: PreventAndRedirectCommands) {
+    commands: PreventAndRedirectCommands
+  ) {
     //return commands.prevent();
     console.log(SessionApp.userToken);
     if (!SessionApp.userToken) {
-      console.log('no permitido')
+      console.log('no permitido');
       return commands.redirect('/login');
     }
   }
@@ -34,8 +39,10 @@ export class VankApp extends LitElement {
   @property({ type: Object }) location = router.location;
 
   @property({ type: Array }) menuTabs: MenuTab[] = [
-    {route: '', name: 'Inicio'},
-    {route: 'movement', name: 'Transferir'}
+    { route: '', name: 'Inicio' },
+    { route: 'movement', name: 'Transferir a mis cuentas' },
+    { route: 'movement-other', name: 'Transferir a otros' },
+    { route: 'account', name: 'Agregar cuenta' },
   ];
 
   @property({ type: String }) projectName = 'Vank';
@@ -125,8 +132,14 @@ export class VankApp extends LitElement {
         <header slot="navbar" theme="dark">
           <vaadin-drawer-toggle></vaadin-drawer-toggle>
           <h1>${this.getSelectedTabName(this.menuTabs)}</h1>
-          <img src="/src/images/user_male.png" alt="Avatar" />
-          <vaadin-button class="confirm" @click=${this.logOut}>LogOut</vaadin-button>
+          <img src="${
+            SessionApp.sex === 'M'
+              ? '/src/images/user_male.png'
+              : '/src/images/user_female.png'
+          }" alt="Avatar"> ${SessionApp.fullName} </img>
+          <vaadin-button theme="error" style="margin: 10px;" class="confirm" @click=${
+            this.logOut
+          }>Salir</vaadin-button>
         </header>
 
         <div slot="drawer">
@@ -137,12 +150,14 @@ export class VankApp extends LitElement {
           <hr />
           <vaadin-tabs orientation="vertical" theme="minimal" id="tabs" .selected="${this.getIndexOfSelectedTab()}">
             ${this.menuTabs.map(
-      (menuTab) => html`
+              menuTab => html`
                 <vaadin-tab>
-                  <a href="${router.urlForPath(menuTab.route)}" tabindex="-1">${menuTab.name}</a>
+                  <a href="${router.urlForPath(menuTab.route)}" tabindex="-1"
+                    >${menuTab.name}</a
+                  >
                 </vaadin-tab>
               `
-    )}
+            )}
           </vaadin-tabs>
         </div>
         <slot></slot>
@@ -158,12 +173,18 @@ export class VankApp extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener('vaadin-router-location-changed', this._routerLocationChanged);
+    window.addEventListener(
+      'vaadin-router-location-changed',
+      this._routerLocationChanged
+    );
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('vaadin-router-location-changed', this._routerLocationChanged);
+    window.removeEventListener(
+      'vaadin-router-location-changed',
+      this._routerLocationChanged
+    );
   }
 
   private isCurrentLocation(route: string): boolean {
@@ -171,7 +192,9 @@ export class VankApp extends LitElement {
   }
 
   private getIndexOfSelectedTab(): number {
-    const index = this.menuTabs.findIndex((menuTab) => this.isCurrentLocation(menuTab.route));
+    const index = this.menuTabs.findIndex(menuTab =>
+      this.isCurrentLocation(menuTab.route)
+    );
 
     // Select first tab if there is no tab for home in the menu
     if (index === -1 && this.isCurrentLocation('')) {
@@ -182,7 +205,9 @@ export class VankApp extends LitElement {
   }
 
   private getSelectedTabName(menuTabs: MenuTab[]): string {
-    const currentTab = menuTabs.find((menuTab) => this.isCurrentLocation(menuTab.route));
+    const currentTab = menuTabs.find(menuTab =>
+      this.isCurrentLocation(menuTab.route)
+    );
     let tabName = '';
     if (currentTab) {
       tabName = currentTab.name;
@@ -194,19 +219,18 @@ export class VankApp extends LitElement {
 
   logOut() {
     const data = {
-      "email": SessionApp.userName,
+      email: SessionApp.userName,
     };
-    //const ip = 'http://techu-project-myproject.2886795277-80-kitek03.environments.katacoda.com';
-    const ip = 'http://localhost:8002';
     const url = '/apitechu/v0/logout';
-    fetch(ip + url, {
+    fetch(ConstantsApp.IP + url, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer<' + SessionApp.userToken + '>'
-      }
-    }).then(response => this.statusResponse(response))
+        Authorization: 'Bearer<' + SessionApp.userToken + '>',
+      },
+    })
+      .then(response => this.statusResponse(response))
       .then(response => response.json())
       .then(response => {
         console.log('Success:', response);
@@ -218,13 +242,13 @@ export class VankApp extends LitElement {
   statusResponse(response: Response) {
     //Validar que la respuesta es 200
     if (response.status === 200) {
-      return Promise.resolve(response)
+      return Promise.resolve(response);
     } else {
-      return Promise.reject(new Error(response.statusText))
+      return Promise.reject(new Error(response.statusText));
     }
   }
 
-/*
+  /*
 
    render() {
 
@@ -290,5 +314,4 @@ export class VankApp extends LitElement {
     }
   `;
 */
-
 }

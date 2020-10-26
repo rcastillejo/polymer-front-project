@@ -21,13 +21,13 @@ import '@vaadin/vaadin-dialog';
 import { SessionApp } from '../../session-app.js';
 import { ConstantsApp } from '../../constants-app.js';
 
-@customElement('add-movement-view')
-export class AddMovementView extends LitElement {
+@customElement('add-movement-others-view')
+export class AddMovementOthersView extends LitElement {
   @property() from = '';
   @property() to = '';
   @property({ type: Number }) amount = 0;
 
-  @property() toMySelf = true;
+  @property() toMySelf = false;
 
   @internalProperty() accounts = [
     { balance: 3000, alias: 'A', account: '01' },
@@ -111,7 +111,7 @@ export class AddMovementView extends LitElement {
 
   render() {
     return html`
-       <vaadin-dialog no-close-on-outside-click aria-label="simple">
+      <vaadin-dialog no-close-on-outside-click aria-label="simple">
         <template>Transfiriendo...</template>
       </vaadin-dialog>
       <vaadin-form-layout>
