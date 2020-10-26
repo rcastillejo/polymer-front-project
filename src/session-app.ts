@@ -55,6 +55,6 @@ export class SessionApp {
 
   static set sex(value: string) {
     this._sex = value;
-    sessionStorage.setItem('_sex', value);
+    sessionStorage.setItem('sex', value);
   }
 }
