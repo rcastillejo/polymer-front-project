@@ -2,7 +2,7 @@
 
 [Enlace del repositorio](https://bitbucket.org/luisricardo_castillejo/front-project)
 
-## Quickstart
+## Iniciar Proyecto
 
 Instalar componentes:
 
