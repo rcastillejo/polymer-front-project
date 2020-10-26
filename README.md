@@ -1,29 +1,17 @@
-<p align="center">
-  <img width="200" src="https://open-wc.org/hero.png"></img>
-</p>
+## Se utilizó Open-wc Starter App para generar el proyecto
 
-## Open-wc Starter App
-
-[![Built with open-wc recommendations](https://img.shields.io/badge/built%20with-open--wc-blue.svg)](https://github.com/open-wc)
+[Enlace del repositorio](https://bitbucket.org/luisricardo_castillejo/front-project)
 
 ## Quickstart
 
-To get started:
+Instalar componentes:
 
 ```sh
-npm init @open-wc
-# requires node 10 & npm 6 or higher
+npm install
+# requiere node 10 & npm 6 o superior
 ```
 
-## Scripts
+Como probar:
 
-- `npm run start` runs your app for development, reloading on file changes
-- `npm run start:build` runs your app after it has been built using the build command
-- `npm run build` builds your app and outputs it in your `dist` directory
-- `npm run lint` runs the linter for your project
+- `npm run start` inicia el programa, recargando cuando se cambian los archivos
 
-## Tooling configs
-
-For most of the tools, the configuration is in the `package.json` to reduce the amount of files in your project.
-
-If you customize the configuration a lot, you can consider moving them to individual files.
