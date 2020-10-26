@@ -1,8 +1,6 @@
 import { Router } from '@vaadin/router';
 import '@vaadin/vaadin-lumo-styles/all-imports';
-
-// eslint-disable-next-line import/extensions
-import './global-styles';
+import '../../src/global-styles.js';
 
 const routes = [
   {
