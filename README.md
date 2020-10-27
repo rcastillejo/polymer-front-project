@@ -1,10 +1,10 @@
-## Vank App Front
+## Vank App Front - LitElement
 
 [Enlace del repositorio](https://bitbucket.org/luisricardo_castillejo/front-project)
 
 ## Iniciar Proyecto
 
-Instalar componentes:
+Instalar dependencias:
 
 ```sh
 npm install
